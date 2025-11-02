@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Calendar Application</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Authentication Screen -->
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-card">
+            <h1>📅 Group Calendar</h1>
+            <form id="authForm">
+                <div class="form-group">
+                    <label for="authEmail">Email</label>
+                    <input type="email" id="authEmail" required placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="authPassword">Password</label>
+                    <input type="password" id="authPassword" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Sign In / Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="appContainer" class="app-container" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>📅 Calendar</h2>
+            
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div id="userEmail">user@example.com</div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+
+            <div class="calendar-filters">
+                <h3 style="margin-bottom: 15px; font-size: 1.1em;">Calendars</h3>
+                <button class="filter-btn active" data-filter="all">All Calendars</button>
+                <button class="filter-btn" data-filter="personal">Personal</button>
+                <div id="groupCalendarFilters"></div>
+            </div>
+
+            <button class="btn-primary" style="width: 100%;" onclick="openCreateCalendarModal()">
+                + Create Group Calendar
+            </button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h1>My Calendars</h1>
+                <button class="btn-primary" onclick="openEventModal()">+ Add Event</button>
+            </div>
+
+            <div class="calendar-view">
+                <div class="calendar-header">
+                    <div class="nav-buttons">
+                        <button onclick="previousMonth()">← Previous</button>
+                        <button onclick="nextMonth()">Next →</button>
+                        <button onclick="goToToday()">Today</button>
+                    </div>
+                    <div class="month-year" id="monthYear">October 2025</div>
+                </div>
+
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar will be generated here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Event Modal -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Event</h2>
+                <button class="close-btn" onclick="closeEventModal()">×</button>
+            </div>
+            <form id="eventForm">
+                <input type="hidden" id="eventId">
+                
+                <div class="form-group">
+                    <label for="eventTitle">Event Title *</label>
+                    <input type="text" id="eventTitle" required placeholder="Team Meeting">
+                </div>
+
+                <div class="form-group">
+                    <label for="eventDate">Date *</label>
+                    <input type="date" id="eventDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventTime">Time *</label>
+                    <input type="time" id="eventTime" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventCalendar">Calendar *</label>
+                    <select id="eventCalendar" required>
+                        <option value="personal">Personal</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventPriority">Priority</label>
+                    <select id="eventPriority">
+                        <option value="normal">Normal</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventStatus">Status</label>
+                    <select id="eventStatus">
+                        <option value="not-started">⭕ Not Started</option>
+                        <option value="in-progress">🔄 In Progress</option>
+                        <option value="done">✅ Done</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventDescription">Description</label>
+                    <textarea id="eventDescription" placeholder="Add details about this event..."></textarea>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="eventRecurring">
+                    <label for="eventRecurring">Recurring Event</label>
+                </div>
+
+                <div class="form-group" id="recurringOptions" style="display: none;">
+                    <label for="eventRecurrence">Repeat</label>
+                    <select id="eventRecurrence">
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn-primary">Save Event</button>
+                    <button type="button" class="btn-secondary" onclick="closeEventModal()">Cancel</button>
+                    <button type="button" class="btn-secondary btn-danger" id="deleteEventBtn" style="display: none; margin-left: auto;" onclick="deleteEvent()">Delete</button>
+                    <button type="button" class="btn-secondary" id="cancelEventBtn" style="display: none;" onclick="cancelEvent()">Cancel Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Calendar Modal -->
+    <div id="createCalendarModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Group Calendar</h2>
+                <button class="close-btn" onclick="closeCreateCalendarModal()">×</button>
+            </div>
+            <form id="createCalendarForm">
+                <div class="form-group">
+                    <label for="calendarName">Calendar Name *</label>
+                    <input type="text" id="calendarName" required placeholder="Marketing Team">
+                </div>
+
+                <div class="form-group">
+                    <label for="calendarDescription">Description</label>
+                    <textarea id="calendarDescription" placeholder="Describe this calendar..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="inviteEmails">Invite Members (comma-separated emails)</label>
+                    <input type="text" id="inviteEmails" placeholder="user1@example.com, user2@example.com">
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn-primary">Create Calendar</button>
+                    <button type="button" class="btn-secondary" onclick="closeCreateCalendarModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
