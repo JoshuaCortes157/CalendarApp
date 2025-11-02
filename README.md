@@ -51,3 +51,4 @@ The database will consist of several tables:
 The Node.js/Express routes will serve JSON data to the frontend. JavaScript on the frontend will handle user interactions, make fetch requests to the Express routes, and update the webpage content accordingly. The PostgreSQL database will be accessed through the Express backend to store, retrieve, and update information.
 
 **Note:** Actual implementation will involve additional functionalities such as user authentication with JWT tokens, password hashing with bcrypt, authorization middleware, error handling, input validation, and security measures.
+# CalendarApp
