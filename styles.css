@@ -50,12 +50,12 @@ body {
 
 .filter-btn:hover {
   background: #333;
-  border-color: #4a90e2;
+  border-color: #3a7bc8;
 }
 
 .filter-btn.active {
-  background: #4a90e2;
-  border-color: #4a90e2;
+  background: #3a7bc8;
+  border-color: #3a7bc8;
 }
 
 .user-info {
@@ -70,7 +70,7 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #4a90e2;
+  background: #3a7bc8;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,8 +81,8 @@ body {
 .logout-btn {
   width: 100%;
   padding: 10px;
-  background: #333;
-  border: 1px solid #555;
+  background: #ef4444;
+  border: 1px solid #dc2626;
   color: white;
   border-radius: 6px;
   cursor: pointer;
@@ -91,8 +91,8 @@ body {
 }
 
 .logout-btn:hover {
-  background: #444;
-  border-color: #666;
+  background: #dc2626;
+  border-color: #b91c1c;
 }
 
 .main-content {
@@ -116,7 +116,7 @@ body {
 
 .btn-primary {
   padding: 12px 24px;
-  background: #4a90e2;
+  background: #3a7bc8;
   color: white;
   border: none;
   border-radius: 6px;
@@ -127,7 +127,7 @@ body {
 }
 
 .btn-primary:hover {
-  background: #357abd;
+  background: #2a5a9e;
 }
 
 .btn-secondary {
@@ -191,7 +191,7 @@ body {
 
 .nav-buttons button:hover {
   background: #f5f5f5;
-  border-color: #4a90e2;
+  border-color: #3a7bc8;
 }
 
 .calendar-grid {
@@ -203,9 +203,9 @@ body {
 .day-header {
   text-align: center;
   font-weight: 600;
-  color: #666;
+  color: #ffffff;
   padding: 10px;
-  background: #f5f5f5;
+  background: #0a0a0a;
   border-radius: 6px;
 }
 
@@ -221,7 +221,7 @@ body {
 
 .day-cell:hover {
   background: #f0f0f0;
-  border-color: #4a90e2;
+  border-color: #3a7bc8;
 }
 
 .day-number {
@@ -267,7 +267,7 @@ body {
 }
 
 .priority-urgent {
-  background: #4a90e2;
+  background: #3a7bc8;
   color: white;
 }
 
@@ -351,7 +351,7 @@ body {
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #4a90e2;
+  border-color: #3a7bc8;
 }
 
 .form-group textarea {
@@ -393,6 +393,20 @@ body {
   color: #ffffff;
 }
 
+.auth-card label {
+  color: #ffffff;
+}
+
+.auth-card input {
+  background: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #404040;
+}
+
+.auth-card input::placeholder {
+  color: #888;
+}
+
 .status-icon {
   margin-right: 5px;
 }
@@ -401,4 +415,100 @@ body {
   font-size: 0.75em;
   color: #666;
   margin-top: 4px;
+}
+
+.notification-bell {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #e0e0e0;
+  transition: all 0.2s;
+}
+
+.notification-bell:hover {
+  background: #f5f5f5;
+  border-color: #0a0a0a;
+}
+
+.bell-icon {
+  font-size: 1.3em;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -10px;
+  right: -8px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65em;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+}
+
+.productivity-section {
+  margin-top: 30px;
+  padding: 20px;
+  background: #1a1a1a;
+  border-radius: 8px;
+  border: 1px solid #404040;
+}
+
+.productivity-section h3 {
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+
+#productivityChart {
+  width: 100%;
+  height: auto;
+  background: #0a0a0a;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+#productivityStats {
+  color: #ccc;
+  font-size: 0.9em;
+  margin-top: 10px;
+}
+
+#productivityStats div {
+  padding: 5px 0;
+}
+
+#productivityStats span {
+  color: #3a7bc8;
+  font-weight: 600;
+}
+
+#overdueModal .modal-content {
+  background: #0a0a0a;
+  color: white;
+  border: 1px solid #404040;
+}
+
+#overdueModal .modal-header h2 {
+  color: #ffffff;
+}
+
+#overdueModal .close-btn {
+  color: #ccc;
+}
+
+#overdueModal .close-btn:hover {
+  color: #fff;
 }

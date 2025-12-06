@@ -47,13 +47,33 @@
             <button class="btn-primary" style="width: 100%;" onclick="openCreateCalendarModal()">
                 + Create Group Calendar
             </button>
+
+            <!-- Added productivity graph section to sidebar -->
+            <div class="productivity-section">
+                <h3 style="margin: 20px 0 15px 0; font-size: 1.1em;">Productivity</h3>
+                <canvas id="productivityChart" width="240" height="180"></canvas>
+                <div id="productivityStats" style="margin-top: 10px; font-size: 0.9em; color: #ccc;">
+                    <div>Total Completed: <span id="totalCompleted">0</span></div>
+                    <div>This Week: <span id="weekCompleted">0</span></div>
+                </div>
+            </div>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
             <div class="header">
                 <h1>My Calendars</h1>
-                <button class="btn-primary" onclick="openEventModal()">+ Add Event</button>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <!-- Changed bell emoji to SVG outline for better control -->
+                    <div class="notification-bell" onclick="toggleOverdueModal()">
+                        <svg class="bell-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        <span id="overdueCount" class="notification-badge" style="display: none;">0</span>
+                    </div>
+                    <button class="btn-primary" onclick="openEventModal()">+ Add Event</button>
+                </div>
             </div>
 
             <div class="calendar-view">
@@ -179,6 +199,18 @@
                     <button type="button" class="btn-secondary" onclick="closeCreateCalendarModal()">Cancel</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Added Overdue Events Modal -->
+    <div id="overdueModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Overdue Events</h2>
+                <button class="close-btn" onclick="toggleOverdueModal()">×</button>
+            </div>
+            <div id="overdueEventsList" style="max-height: 400px; overflow-y: auto;">
+            </div>
         </div>
     </div>
 

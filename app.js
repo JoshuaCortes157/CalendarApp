@@ -33,6 +33,8 @@ function setupEventListeners() {
       renderCalendar()
     }
   })
+
+  document.getElementById("toggleOverdueModal").addEventListener("click", toggleOverdueModal)
 }
 
 function handleAuth(e) {
@@ -108,6 +110,8 @@ function showApp() {
 
   renderCalendarFilters()
   renderCalendar()
+  renderProductivityChart()
+  updateOverdueNotifications()
 }
 
 function renderCalendar() {
@@ -336,6 +340,8 @@ function handleEventSubmit(e) {
 
   saveToLocalStorage()
   renderCalendar()
+  renderProductivityChart()
+  updateOverdueNotifications()
   closeEventModal()
 }
 
@@ -347,6 +353,8 @@ function deleteEvent() {
 
     saveToLocalStorage()
     renderCalendar()
+    renderProductivityChart()
+    updateOverdueNotifications()
     closeEventModal()
   }
 }
@@ -699,5 +707,113 @@ function handleInviteSubmit(calendarId) {
     )
   } else {
     alert("All specified users are already members of this calendar.")
+  }
+}
+
+function renderProductivityChart() {
+  const canvas = document.getElementById("productivityChart")
+  if (!canvas) return
+
+  const ctx = canvas.getContext("2d")
+
+  const completedEvents = events.filter((e) => e.status === "done" && !e.canceled)
+
+  const last7Days = []
+  const dayLabels = ["M", "T", "W", "TH", "F", "Sat", "Sun"]
+  const completedByDay = []
+  const today = new Date()
+
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(today)
+    date.setDate(date.getDate() - i)
+    const dateStr = date.toISOString().split("T")[0]
+    last7Days.push(dateStr)
+
+    const completedOnDay = completedEvents.filter((e) => {
+      const eventDate = new Date(e.date)
+      return eventDate.toISOString().split("T")[0] === dateStr
+    }).length
+
+    completedByDay.push(completedOnDay)
+  }
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+  const padding = 30
+  const chartWidth = canvas.width - padding * 2
+  const chartHeight = canvas.height - padding * 2
+  const maxValue = Math.max(...completedByDay, 5)
+  const barWidth = chartWidth / 7
+
+  ctx.strokeStyle = "#64748b"
+  ctx.fillStyle = "#3b82f6"
+
+  last7Days.forEach((day, index) => {
+    const x = padding + index * barWidth
+    const y = padding + chartHeight - (completedByDay[index] / maxValue) * chartHeight
+    const height = (completedByDay[index] / maxValue) * chartHeight
+
+    ctx.fillRect(x, y, barWidth - 10, height)
+    ctx.strokeRect(x, y, barWidth - 10, height)
+
+    ctx.fillStyle = "#ffffff"
+    ctx.font = "12px sans-serif"
+    ctx.textAlign = "center"
+    ctx.fillText(dayLabels[index], x + (barWidth - 10) / 2, canvas.height - 10)
+    ctx.fillStyle = "#3b82f6"
+  })
+
+  const weekCompleted = completedByDay.reduce((a, b) => a + b, 0)
+  document.getElementById("totalCompleted").textContent = completedEvents.length
+  document.getElementById("weekCompleted").textContent = weekCompleted
+}
+
+function updateOverdueNotifications() {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const overdueEvents = events.filter((e) => {
+    const eventDate = new Date(e.date)
+    eventDate.setHours(0, 0, 0, 0)
+    return eventDate < today && e.status !== "done" && !e.canceled
+  })
+
+  const overdueCount = document.getElementById("overdueCount")
+  if (overdueEvents.length > 0) {
+    overdueCount.textContent = overdueEvents.length
+    overdueCount.style.display = "block"
+  } else {
+    overdueCount.style.display = "none"
+  }
+
+  const overdueList = document.getElementById("overdueEventsList")
+  if (overdueEvents.length === 0) {
+    overdueList.innerHTML = '<p style="padding: 20px; text-align: center; color: #64748b;">No overdue events</p>'
+  } else {
+    overdueList.innerHTML = overdueEvents
+      .map(
+        (event) => `
+      <div style="padding: 15px; border-bottom: 1px solid #333;">
+        <div style="font-weight: 600; color: #fff; margin-bottom: 5px;">${event.title}</div>
+        <div style="font-size: 0.9em; color: #94a3b8;">
+          Due: ${new Date(event.date).toLocaleDateString()} at ${event.time}
+        </div>
+        <div style="font-size: 0.85em; color: #64748b; margin-top: 5px;">
+          Priority: ${event.priority === "urgent" ? "🔴 Urgent" : "🟢 Normal"}
+        </div>
+      </div>
+    `,
+      )
+      .join("")
+  }
+}
+
+function toggleOverdueModal() {
+  const modal = document.getElementById("overdueModal")
+  if (modal.style.display === "flex") {
+    modal.style.display = "none"
+  } else {
+    updateOverdueNotifications()
+    modal.style.display = "flex"
   }
 }
