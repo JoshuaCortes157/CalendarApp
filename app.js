@@ -780,8 +780,8 @@ function updateOverdueNotifications() {
 
   const overdueCount = document.getElementById("overdueCount")
   if (overdueEvents.length > 0) {
-    overdueCount.textContent = overdueEvents.length
-    overdueCount.style.display = "block"
+    overdueCount.innerHTML = `<span class="badge-text">${overdueEvents.length}</span>`
+    overdueCount.style.display = "flex"
   } else {
     overdueCount.style.display = "none"
   }
